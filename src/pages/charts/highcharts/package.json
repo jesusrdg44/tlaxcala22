@@ -2,5 +2,8 @@
   "name": "HighCharts",
   "version": "0.0.0",
   "private": true,
-  "main": "./HighCharts.js"
+  "main": "./HighCharts.js",
+  "dependencies": {
+    "HighCharts": "file:"
+  }
 }

@@ -2,5 +2,8 @@
   "name": "Loader",
   "version": "1.0.0",
   "main": "Loader.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "Loader": "file:"
+  }
 }

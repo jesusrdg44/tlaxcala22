@@ -2,5 +2,8 @@
   "name": "error",
   "version": "0.0.0",
   "private": true,
-  "main": "./ErrorPage.js"
+  "main": "./ErrorPage.js",
+  "dependencies": {
+    "error": "file:"
+  }
 }

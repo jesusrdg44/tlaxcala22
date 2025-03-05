@@ -20,10 +20,10 @@ export function registerError(payload) {
 export function registerUser(payload) {
     return (dispatch) => {
         if (payload.creds.email.length > 0 && payload.creds.password.length > 0) {
-            toast.success("You've been registered successfully");
+            toast.success("Bienvenido a la Secretaria de Turismo de Tlaxcala");
             payload.history.push('/login');
         } else {
-            dispatch(registerError('Something was wrong. Try again'));
+            dispatch(registerError('Algo salio mal, porfavor intenta mas tarde'));
         }
     }
 }

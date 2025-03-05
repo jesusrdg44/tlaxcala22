@@ -6,11 +6,13 @@ import { Alert, Button, Label, Input, FormGroup } from "reactstrap";
 import Widget from "../../components/Widget";
 import { loginUser } from "../../actions/user";
 import s from './Login.module.scss';
-import signinImg from "../../images/signinImg.svg";
+import signinImg from "../../images/tlaxcala-intro.jpg";
+import logo from "../../images/nuevo-tlax.png";
 import img1 from "../../images/Vector-1.svg";
 import img2 from "../../images/Vector-2.svg";
 import img3 from "../../images/Vector-3.svg";
 import img4 from "../../images/Vector-4.svg";
+import FondoTlax from "../../images/myicons/palaciot.jpg";
 
 class Login extends React.Component {
   static propTypes = {
@@ -25,8 +27,8 @@ class Login extends React.Component {
     super(props);
 
     this.state = {
-      email: "admin@flatlogic.com",
-      password: "password",
+      email: "",
+      password: "",
     };
 
     this.doLogin = this.doLogin.bind(this);
@@ -35,6 +37,7 @@ class Login extends React.Component {
     this.changeEmail = this.changeEmail.bind(this);
     this.changePassword = this.changePassword.bind(this);
     this.signUp = this.signUp.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this); // Add this line
   }
 
   changeEmail(event) {
@@ -47,9 +50,27 @@ class Login extends React.Component {
 
   doLogin(e) {
     e.preventDefault();
-    this.props.dispatch(
-      loginUser({ email: this.state.email, password: this.state.password })
-    );
+    const { email, password } = this.state;
+
+    fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem('authenticated', JSON.stringify(true));
+          this.props.history.push('/app');
+        } else {
+          alert('Usuario o contraseña incorrectos');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
 
   googleLogin() {
@@ -64,6 +85,11 @@ class Login extends React.Component {
     this.props.history.push("/register");
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.doLogin(e);
+  }
+
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/app' } }; // eslint-disable-line
 
@@ -75,91 +101,59 @@ class Login extends React.Component {
     }
 
     return (
-      <div className="auth-page">
-        <Widget
-          className="widget-auth my-auto"
-          title={
-            <h3 className="mt-0 mb-2" style={{ fontSize: 40 }}>
-              Login
-            </h3>
-          }
-        >
-          <p className="widget-auth-info">
-            Welcome Back! Please login to your account
-          </p>
-          <form className="mt" onSubmit={this.doLogin}>
-            {this.props.errorMessage && (
-              <Alert className="alert-sm" color="danger">
-                {this.props.errorMessage}
-              </Alert>
-            )}
-            <div className="form-group">
-              <Label for="search-input1">Username</Label>
+     
+      <div style={{
+        position : 'relative',  
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundImage: `url(${FondoTlax})`,
+        backgroundColor: 'rgba(79, 32, 103, 0.6)', 
+        zIndex: '1',  
+        cover: 'cover',
+      }}>
+       
+        <div style={{
+          background: 'white',
+          padding: '40px',
+          borderRadius: '10px',
+          boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)',
+          width: '350px',
+          textAlign: 'center'
+        }}>
+          <img src={logo} alt="Logo" width="150" style={{ marginBottom: '20px' }} />
+          <h2 style={{ color: '#007bff', fontWeight: 'bold' }}>Inicio de Sesión</h2>
+          <form onSubmit={this.handleSubmit} noValidate>
+            <div className="form-group mb-3">
               <input
-                className="form-control"
-                defaultValue={"admin"}
+                type="email"
+                className="form-control form-control-lg"
+                placeholder="Nombre de Usuario"
+                // value={this.state.email}
                 onChange={this.changeEmail}
                 required
-                name="email"
-                placeholder="Enter your username"
+                style={{ borderRadius: '25px' }}
               />
             </div>
-            <div className="form-group mb-2">
-              <Label for="search-input1">Password</Label>
+            <div className="form-group mb-3">
               <input
-                className="form-control"
-                defaultValue={"123123"}
-                onChange={this.changePassword}
                 type="password"
+                className="form-control form-control-lg"
+                placeholder="Contraseña"
+                // value={this.state.password}
+                onChange={this.changePassword}
                 required
-                name="password"
-                placeholder="Enter your password"
+                style={{ borderRadius: '25px' }}
               />
             </div>
-            <FormGroup className="checkbox abc-checkbox mb-4 d-flex" check>
-              <Input
-                id="checkbox1"
-                type="checkbox"
-              />
-              <Label for="checkbox1" check className={"mr-auto"}>
-                Remember me
-              </Label>
-              <a href="/">Forgot password?</a>
-            </FormGroup>
-            <Button
-              type="submit"
-              color="warning"
-              className="auth-btn mb-3"
-              size="sm"
-            >
-              {this.props.isFetching ? "Loading..." : "Login"}
-            </Button>
-            <p className="widget-auth-info text-center">Or</p>
-            <div className={"d-flex mb-4 mt-3"}>
-              <p className={"mb-0"}>Login with</p>
-              <a href={"/"}>
-                <img src={img1} alt="facebook" className={"ml-3"} />
-              </a>
-              <a href={"/"}>
-                <img src={img2} alt="github" className={"ml-3"} />
-              </a>
-              <a href={"/"}>
-                <img src={img3} alt="linkedin" className={"ml-3"} />
-              </a>
-              <a href={"/"}>
-                <img src={img4} alt="google_plus" className={"ml-3"} />
-              </a>
-            </div>
-            <div className={"d-flex align-items-center"}>
-              Don’t have an account?{" "}
-              <Link to="register" className={"ml-1"}>
-                Sign Up here
-              </Link>
-            </div>
-            <footer className={s.footer}>{new Date().getFullYear()} © One React - React Admin Dashboard Template Made by &nbsp;<a href="https://flatlogic.com" rel="noopener noreferrer" target="_blank">Flatlogic LLC</a></footer>
+            <button type="submit" className="btn btn-primary btn-lg w-100" style={{ borderRadius: '25px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}>Iniciar Sesión</button>
+            <p className="mt-3">
+              No tienes cuenta?
+              <Link to="register" className="ml-1" style={{ color: '#007bff', fontWeight: 'bold' }}> Crear Cuenta</Link>
+            </p>
           </form>
-        </Widget>
-        <img src={signinImg} alt="signin" className={"backImg"} />
+        </div>
       </div>
     );
   }

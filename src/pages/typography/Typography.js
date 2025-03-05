@@ -1,68 +1,63 @@
-import React from "react";
-import { Col, Row } from "reactstrap";
-import Widget from "../../components/Widget";
+import React, { useState } from "react";
+import { Col, Row, Form, FormGroup, Label, Input, Button } from "reactstrap";
+import Widget from "../../components/Widget/Widget";
 
 const Typography = () => {
+  const [report, setReport] = useState({ title: "", description: "", date: "" });
+
+  const handleChange = (e) => {
+    setReport({ ...report, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Report submitted:", report);
+  };
+
   return (
     <div>
+
+     
       <Row>
-        <Col lg={6}>
-          <Widget title={"Headings"}>
-            <h1>h1. Heading</h1>
-            <h2>h2. Heading</h2>
-            <h3>h3. Heading</h3>
-            <h4>h4. Heading</h4>
-            <h5>h5. Heading</h5>
-            <h6>h6. Heading</h6>
-          </Widget>
-        </Col>
-        <Col lg={6}>
-          <Widget title={"Typography Colors"}>
-            <h1 style={{ color: "#323232" }}>h1. Heading</h1>
-            <h2 className={"text-warning"}>h2. Heading</h2>
-            <h3 className={"text-danger"}>h3. Heading</h3>
-            <h4 className={"text-success"}>h4. Heading</h4>
-            <h5 className={"text-primary"}>h5. Heading</h5>
-            <h6 className={"text-info"}>h6. Heading</h6>
-          </Widget>
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={6}>
-          <Widget title={"Basic Text Settings"}>
-            <p>
-              You can use the mark tag to <mark>highlight</mark> text.
-            </p>
-            <p>
-              <del>
-                This line of text is meant to be treated as deleted text.
-              </del>
-            </p>
-            <p>
-              <ins>
-                This line of text is meant to be treated as an addition to the
-                document.
-              </ins>
-            </p>
-            <p>
-              <small>
-                This line of text is meant to be treated as fine print.
-              </small>
-            </p>
-            <p>
-              <em>This line rendered as italicized text.</em>
-            </p>
-            <p>
-              <strong>This line rendered as bold text.</strong>
-            </p>
-          </Widget>
-        </Col>
-        <Col lg={6}>
-          <Widget title={"Text Size"}>
-            <h1 className="display-1">Display 1</h1>
-            <h1 className="display-2">Display 2</h1>
-            <h1 className="display-3">Display 3</h1>
-            <h1 className="display-4">Display 4</h1>
+        <Col lg={12}>
+          <Widget title={"Crear Reporte"}>
+            <Form onSubmit={handleSubmit}>
+              <FormGroup>
+                <Label for="title">Report Title</Label>
+                <Input
+                  type="text"
+                  name="title"
+                  id="title"
+                  placeholder="Enter report title"
+                  value={report.title}
+                  onChange={handleChange}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="description">Description</Label>
+                <Input
+                  type="textarea"
+                  name="description"
+                  id="description"
+                  placeholder="Enter report description"
+                  value={report.description}
+                  onChange={handleChange}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="date">Date</Label>
+                <Input
+                  type="date"
+                  name="date"
+                  id="date"
+                  value={report.date}
+                  onChange={handleChange}
+                />
+              </FormGroup>
+              <Button color="primary" type="submit">
+                Submit Report
+              </Button>
+            </Form>
           </Widget>
         </Col>
       </Row>

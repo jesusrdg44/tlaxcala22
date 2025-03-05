@@ -8,7 +8,7 @@
   bottom: 0;
   height: 100vh;
   //border-right: $sidebar-border;
-  background-color: var(--sidebar-bg-color);
+  background-color: rgb(231, 204, 252);
   color: var(--sidebar-color);
   transition: background-color 0.2s ease, margin 0.2s ease;
   @include scroll-bar($sidebar-scrollbar-bg);
@@ -27,7 +27,7 @@
   overflow-x: hidden;
   min-width: $sidebar-width-open;
   transition: width $sidebar-transition-time ease-in-out;
-  background-color: var(--sidebar-bg-color);
+  background-color: rgb(170, 106, 222);
   z-index: 999;
   box-shadow: 4px 4px 25px rgba(109, 105, 105, 0.15);
 }
@@ -48,7 +48,7 @@
   justify-content: center;
   align-items: center;
   height: 66px;
-  background-color: #feb049;
+  background-color: rgb(170, 106, 222);
   font-size: 30px;
   width: 100%;
   font-weight: $font-weight-light;
@@ -80,7 +80,7 @@
 
 .downNav {
   hr {
-    background-color: rgba(#000000, 0.2);
+    background-color: rgba(170, 106, 222, 0.2);
     width: 85%;
   }
   padding: 34px 0 10px;
@@ -111,7 +111,7 @@
 }
 
 .actionLink {
-  color: #aaa;
+  color: rgb(170, 106, 222);
   float: right;
   margin-right: 15px;
   margin-top: -1px;

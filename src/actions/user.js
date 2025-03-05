@@ -45,7 +45,7 @@ export function loginUser(creds) {
         if (creds.email.length > 0 && creds.password.length > 0) {
             localStorage.setItem('authenticated', true)
         } else {
-            dispatch(loginError('Something was wrong. Try again'));
+            dispatch(loginError('Algo salio mal , intenta mas tarde'));
         }
     }
 }

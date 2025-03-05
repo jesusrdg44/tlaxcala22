@@ -2,5 +2,8 @@
   "name": "BreadcrumbHistory",
   "version": "0.0.0",
   "private": true,
-  "main": "./BreadcrumbHistory.js"
+  "main": "./BreadcrumbHistory.js",
+  "dependencies": {
+    "BreadcrumbHistory": "file:"
+  }
 }

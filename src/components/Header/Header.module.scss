@@ -9,7 +9,7 @@
   transition: background-color .2s ease, margin .2s ease;
 
   &Light {
-    box-shadow: 4px 4px 25px rgba(109, 105, 105, 0.15);
+    box-shadow: 4px 4px 25px rgba(215, 104, 255, 0.74);
   }
 
   .logo {
@@ -18,8 +18,8 @@
   }
 
   .toggleSidebarNav {
-    height: calc(100% + 14px);
-    background: #FEB049;
+    height: calc(100% + 24px);
+    background: rgb(170, 106, 222);
   }
 
   &.navbarFloatingType {
@@ -32,7 +32,7 @@
     }
   }
   a {
-    color: #DBDBDB
+    color: rgb(170, 106, 222);
   }
 
   .circleStyle {
@@ -72,7 +72,6 @@
         background-color: #F0F0F0;
       }
     }
-
 
     .input-group-prepend {
       background-color: #1E1E1E;
@@ -243,14 +242,9 @@
 }
 
 .fullVersionBtn {
-  color: #DBDBDB;
-  border: 1px solid theme-color('warning');
+  color: rgb(170, 106, 222);
+  border: 1px solid theme-color('violet');
   border-radius: 2px;
   margin-right: 30px;
-  &:hover {
-    background-color: theme-color('warning');
-    a {
-      color: #fff;
-    }
-  }
+  padding: 5px 10px;
 }

@@ -299,10 +299,10 @@ const splineArea = {
       },
     },
     fill: {
-      colors: ["rgba(255, 205, 101, .2)", 'rgba(0,0,0,0)'],
+      colors: ["rgb(231, 204, 252))", 'rgba(0,0,0,0)'],
       type: 'solid'
     },
-    colors: ["#FFBF69", "#323232"],
+    colors: ["violet", "black"],
     legend: {
       position: "top",
     },
@@ -389,7 +389,7 @@ class Dashboard extends React.Component {
         <Row>
           <Col xl={4}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Average Order Value</p>}
+              title={<p style={{ fontWeight: 700 }}>Informes Mensuales</p>}
               customDropDown
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -419,7 +419,7 @@ class Dashboard extends React.Component {
           </Col>
           <Col xl={4}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Convertion Rate</p>}
+              title={<p style={{ fontWeight: 700 }}>Almacen</p>}
               customDropDown
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -470,7 +470,7 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h5 className={"fw-thin pt-1 mb-0"}>Visitors</h5>
+                  <h5 className={"fw-thin pt-1 mb-0"}>Usuarios</h5>
                 </Col>
                 <Col
                   sm={12}
@@ -507,7 +507,7 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h5 className={"fw-thin pt-1 mb-0"}>Customers</h5>
+                  <h5 className={"fw-thin pt-1 mb-0"}>Clientes</h5>
                 </Col>
                 <Col
                   sm={12}
@@ -525,7 +525,7 @@ class Dashboard extends React.Component {
         <Row>
           <Col xl={4}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Upsell Take Rate </p>}
+              title={<p style={{ fontWeight: 700 }}>Balance de Costos</p>}
               customDropDown
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -555,7 +555,7 @@ class Dashboard extends React.Component {
           </Col>
           <Col xl={4}>
             <Widget
-              title={<p style={{ fontWeight: 700 }}>Number of returns</p>}
+              title={<p style={{ fontWeight: 700 }}>Productos</p>}
               customDropDown
             >
               <Row className={`justify-content-between mt-3`} noGutters>
@@ -606,7 +606,7 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h5 className={"fw-thin pt-1 mb-0"}>Sales</h5>
+                  <h5 className={"fw-thin pt-1 mb-0"}>Compras</h5>
                 </Col>
                 <Col
                   sm={12}
@@ -643,7 +643,7 @@ class Dashboard extends React.Component {
                   sm={12}
                   className={"d-flex justify-content-center align-items-center"}
                 >
-                  <h5 className={"fw-thin pt-1 mb-0"}>Orders</h5>
+                  <h5 className={"fw-thin pt-1 mb-0"}>Secciones</h5>
                 </Col>
                 <Col
                   sm={12}

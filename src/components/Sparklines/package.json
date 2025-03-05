@@ -2,5 +2,8 @@
   "name": "Sparklines",
   "version": "0.0.0",
   "private": true,
-  "main": "./Sparklines.js"
+  "main": "./Sparklines.js",
+  "dependencies": {
+    "Sparklines": "file:"
+  }
 }

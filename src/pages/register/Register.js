@@ -7,8 +7,11 @@ import Widget from "../../components/Widget";
 import { registerUser, registerError } from "../../actions/register";
 import { loginUser } from "../../actions/user";
 import Login from "../login";
+import logo from "../../images/nuevo-tlax.png";
+import FondoTlax from  '../../images/hua.png';
 import signupImg from "../../images/signupImg.svg";
 import s from './Register.module.scss';
+
 
 import img1 from "../../images/Vector-1.svg";
 import img2 from "../../images/Vector-2.svg";
@@ -27,6 +30,11 @@ class Register extends React.Component {
       email: "",
       password: "",
       confirmPassword: "",
+      nombre: "",
+      ap: "",
+      am: "",
+      rol: "",
+      roles: []
     };
 
     this.doRegister = this.doRegister.bind(this);
@@ -37,6 +45,16 @@ class Register extends React.Component {
     this.changeConfirmPassword = this.changeConfirmPassword.bind(this);
     this.checkPassword = this.checkPassword.bind(this);
     this.isPasswordValid = this.isPasswordValid.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeNombre = this.changeNombre.bind(this);
+    this.changeap = this.changeap.bind(this);
+    this.changeam = this.changeam.bind(this);
+    this.changeRole = this.changeRole.bind(this);
+    this.fetchRoles = this.fetchRoles.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchRoles();
   }
 
   changeEmail(event) {
@@ -50,6 +68,35 @@ class Register extends React.Component {
   changeConfirmPassword(event) {
     this.setState({ confirmPassword: event.target.value });
   }
+
+  changeNombre(event) {
+    this.setState({ nombre: event.target.value });
+  }
+
+  changeap(event) {
+    this.setState({ ap: event.target.value });
+  }
+
+  changeam(event) {
+    this.setState({ am: event.target.value });
+  }
+
+  changeRole(event) {
+    this.setState({ rol: event.target.value });
+  }
+
+  fetchRoles() {
+    fetch('http://localhost:5000/roles')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ roles: data });
+      })
+      .catch(error => {
+        console.error('Error fetching roles:', error);
+      });
+  }
+
+
 
   checkPassword() {
     if (!this.isPasswordValid()) {
@@ -69,19 +116,53 @@ class Register extends React.Component {
       this.state.password && this.state.password === this.state.confirmPassword
     );
   }
+  
 
   doRegister(e) {
     e.preventDefault();
-    this.props.dispatch(
-      registerUser({
-        creds: {
-          email: this.state.email,
-          password: this.state.password,
-        },
-        history: this.props.history,
+    const { email, password, nombre, ap, am,  rol } = this.state;
+    const estatus=1;
+
+    if ( !email || !password || !nombre || !ap ||  !am || !estatus || !rol){
+      alert ('Todos los campos son requeridos');
+      return;
+    }
+
+    // console.log("Enviando datos:", JSON.stringify({ 
+    //   username: email, 
+    //   password, 
+    //   nombre, 
+    //   ap, 
+    //   am, 
+    //   estatus, 
+    //   IdRol: rol 
+    // }));
+  
+    fetch('http://localhost:5000/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+         username: email, password, nombre, ap, am, estatus, IdRol: rol }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          this.props.dispatch(registerUser({
+            creds: { email, password },
+            history: this.props.history,
+          }));
+        } else {
+          this.props.dispatch(registerError(data.message));
+        }
       })
-    );
+      .catch(error => {
+        console.error('Error:', error);
+        this.props.dispatch(registerError('Fallo en el registro'));
+      });
   }
+  
 
   googleLogin() {
     this.props.dispatch(loginUser({ social: "google" }));
@@ -89,6 +170,16 @@ class Register extends React.Component {
 
   microsoftLogin() {
     this.props.dispatch(loginUser({ social: "microsoft" }));
+  }
+
+  handleChange = (e) => {
+    this.setState({[e.target.name]: e.target.value});
+  };
+  
+
+  handleSubmit(e) {
+  e.preventDefault();    
+      this.doRegister(e);
   }
 
   render() {
@@ -102,99 +193,123 @@ class Register extends React.Component {
     }
 
     return (
-      <div className="auth-page">
-        <Widget
-          className="widget-auth my-auto"
-          title={
-            <h3 className="mt-0 mb-2" style={{ fontSize: 40 }}>
-              Sing up
-            </h3>
-          }
-        >
-          <p className="widget-auth-info">
-            Welcome! Please create your account
-          </p>
-          <form className="mt" onSubmit={this.doLogin}>
-            {this.props.errorMessage && (
-              <Alert className="alert-sm" color="danger">
-                {this.props.errorMessage}
-              </Alert>
-            )}
-            <div className="form-group">
-              <Label for="search-input1">Username</Label>
-              <input
-                className="form-control"
-                defaultValue={""}
-                onChange={this.changeEmail}
-                required
-                name="email"
-                placeholder="Enter your username"
-              />
-            </div>
-            <div className="form-group mb-2">
-              <Label for="search-input1">Password</Label>
-              <input
-                className="form-control"
-                defaultValue={""}
-                onChange={this.changePassword}
-                type="password"
-                required
-                name="password"
-                placeholder="Enter your password"
-              />
-            </div>
-            <FormGroup className="checkbox abc-checkbox mb-4 d-flex" check>
-              <>
-                <Input
-                  id="checkbox1"
-                  type="checkbox"
-                  style={{ marginLeft: 3 }}
-                />
-                <Label for="checkbox1" check>
-                  Remember me
-                </Label>
-              </>
-            </FormGroup>
-            <Button
-              type="submit"
-              color="warning"
-              className="auth-btn mb-3"
-              size="sm"
-              onClick={(e) => this.doRegister(e)}
-            >
-              {this.props.isFetching ? "Loading..." : "Singup"}
-            </Button>
-            <p className="widget-auth-info text-center mb-0">Or</p>
-            <div className={"d-flex mb-4 mt-3"}>
-              <p className={"mb-0"}>Login with</p>
-              <a href={"/"}>
-                <img src={img1} alt="" className={"ml-3"} />
-              </a>
-              <a href={"/"}>
-                <img src={img2} alt="" className={"ml-3"} />
-              </a>
-              <a href={"/"}>
-                <img src={img3} alt="" className={"ml-3"} />
-              </a>
-              <a href={"/"}>
-                <img src={img4} alt="" className={"ml-3"} />
-              </a>
-            </div>
-            <div className={"d-flex align-items-center"}>
-              Have an account?{" "}
-              <Link to="login" className={"ml-1"}>
-                Login here
-              </Link>
-            </div>
-            <footer className={s.footer}>{new Date().getFullYear()} © One React - React Admin Dashboard Template Made by &nbsp;<a href="https://flatlogic.com" rel="noopener noreferrer" target="_blank">Flatlogic LLC</a></footer>
-          </form>
-        </Widget>
-        <img
-          src={signupImg}
-          alt="signin"
-          className={"backImg"}
-        />
-      </div>
+       <div style={{
+             position : 'absolute', 
+             top: 0,
+             left : 0,      
+             height: '100%',
+             display: 'flex',
+             justifyContent: 'cover',
+             alignItems: 'cover',
+             backgroundImage: `url(${FondoTlax})`,
+             zIndex: '1',  
+             cover: 'center',
+
+             backgroundAttachment: 'fixed',
+             width: '100%'
+           }}>
+             <div style={{
+               background: 'white',
+               padding: '40px',
+               borderRadius: '10px',
+               boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)',
+               width: '350px',
+               textAlign: 'center'
+             }}>
+               <img src={logo} alt="Logo" width="150" style={{ marginBottom: '20px' }} />
+               <h2 style={{ color: '#007bff', fontWeight: 'bold' }}>Crear Cuenta</h2>
+               <form onSubmit={this.handleSubmit} noValidate>
+               <div className="form-group mb-3">
+                   <input
+                     type="text"
+                     name="nombre"
+                     className="form-control form-control-lg"
+                     placeholder="Nombre"
+                     value={this.state.nombre}
+                     onChange={this.changeNombre}
+                     required
+                     style={{ borderRadius: '25px' }}
+                   />
+                 </div>
+                 
+                 <div className="form-group mb-3">
+                   <input
+                     type="text"
+                     name="ap"
+                     className="form-control form-control-lg"
+                     placeholder="Apellido Paterno"
+                     value={this.state.ap}
+                     onChange={this.changeap}
+                     required
+                     style={{ borderRadius: '25px' }}
+                   />
+                 </div>
+                 <div className="form-group mb-3">
+                   <input
+                     type="text"
+                     name="am"
+                     className="form-control form-control-lg"
+                     placeholder="Apellido Materno"
+                     value={this.state.am}
+                     onChange={this.changeam}
+                     required
+                     style={{ borderRadius: '25px' }}
+                   />
+                 </div>
+                 <div className="form-group mb-3">
+                   <input
+                     type="email"
+                     name="email"
+                     className="form-control form-control-lg"
+                     placeholder="Correo Electrónico"
+                     value={this.state.email}
+                     onChange={this.changeEmail}
+                     required
+                     style={{ borderRadius: '25px' }}
+                   />
+                 </div>
+                 <div className="form-group mb-3">
+                   <input
+                     type="password"
+                     name="password"
+                     className="form-control form-control-lg"
+                     placeholder="Contraseña"
+                     value={this.state.password}
+                     onChange={this.changePassword}
+                     required
+                     style={{ borderRadius: '25px' }}
+                   />
+                 </div>
+                 <div className="form-group mb-3">
+                   <input
+                     type="password"
+                     name="confirmPassword"
+                     className="form-control form-control-lg"
+                     placeholder="Confirmar Contraseña"
+                     value={this.state.confirmPassword}
+                     onChange={this.changeConfirmPassword}
+                     required
+                     style={{ borderRadius: '25px' }}
+                   />
+                 </div>
+                 <div className="form-group mb-3">
+                 <select className="form-control" name="IdRol" onChange={(e) => this.setState({rol: parseInt(e.target.value, 10)})} required>
+                  <option value="">Selecciona un rol</option>
+                  {this.state.roles.map((rol) => (
+                    <option key={rol.IdRol} value={rol.IdRol} name="IdRol">
+                      {rol.Nombre_Rol}
+                    </option>
+                  ))}
+                  </select>
+                 </div>
+                 <button type="submit" className="btn btn-primary btn-lg w-100" style={{ borderRadius: '25px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}>Crear Cuenta</button>
+                 <p className="mt-3">
+                   Ya tienes cuenta?
+                   <Link to="login" className="ml-1" style={{ color: '#007bff', fontWeight: 'bold' }}> Iniciar Sesión</Link>
+                 </p>
+               </form>
+             </div>
+           </div>
     );
   }
 }

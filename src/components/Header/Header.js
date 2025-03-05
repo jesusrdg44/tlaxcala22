@@ -8,6 +8,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
+  DropdownItem,
   InputGroupAddon,
   InputGroup,
   Input,
@@ -33,6 +34,14 @@ import messages from "../../images/messages.svg";
 import lightMessages from "../../images/messages-filled.svg";
 import arrowUnactive from '../../images/Arrow 6.svg'
 import arrowActive from '../../images/Arrow 5.svg'
+
+
+import Notificacion from '../../images/myicons/campana.png';
+import Mensajes from '../../images/myicons/correo-electronico.png';
+import CuentaPerfil from '../../images/myicons/perfil-del-usuario.png';
+import Cuenta2 from  '../../images/myicons/usuario9.png';
+import Cuenta3 from '../../images/myicons/perfil.png';
+
 
 import s from "./Header.module.scss"; // eslint-disable-line css-modules/no-unused-class
 
@@ -72,9 +81,9 @@ class Header extends React.Component {
       arrowImg: arrowActive
     };
   }
-
-  toggleFocus = () => {
-    this.setState({ focus: !this.state.focus });
+  state = {
+    arrowImg: 'default-arrow.png', // Cambia esto según tu imagen por defecto
+    focus: false,
   };
 
   toggleNotifications() {
@@ -99,17 +108,21 @@ class Header extends React.Component {
     this.props.dispatch(logoutUser());
   }
 
-  changeArrowImg() {
-    this.setState({
-      arrowImg: arrowUnactive
-    })
+  logout = () => {
+    this.props.dispatch(logoutUser());
   }
 
-  changeArrowImgOut() {
-    this.setState({
-      arrowImg: arrowActive
-    })
-  }
+  changeArrowImg = () => {
+    this.setState({ arrowImg: 'hover-arrow.png' }); // Cambia esto según tu imagen al pasar el mouse
+  };
+
+  changeArrowImgOut = () => {
+    this.setState({ arrowImg: 'default-arrow.png' }); // Cambia esto según tu imagen por defecto
+  };
+
+  toggleFocus = () => {
+    this.setState(prevState => ({ focus: !prevState.focus }));
+  };
 
   // collapse/uncolappse
   switchSidebar() {
@@ -177,28 +190,34 @@ class Header extends React.Component {
             style={{ marginRight: 12 }}
           />
         </NavItem>
-        <button className={`btn btn-bordered ml-auto ${s.fullVersionBtn}`} onMouseOver={() => this.changeArrowImg()} onMouseLeave={() => this.changeArrowImgOut()}>
-          <a href="https://flatlogic.com/templates/one-react-template/demo" target={"_black"}>Unlock Full Version<img src={this.state.arrowImg} alt="" style={{marginLeft: 14}}/></a></button>
+        <button 
+          className={`btn btn-bordered ml-auto ${s.fullVersionBtn}`}
+          onMouseOver={this.changeArrowImg}
+          onMouseLeave={this.changeArrowImgOut}
+           // Color morado
+        >
+          <a href="dashboard" >Buscar</a></button>
         <Form className={`d-md-down-none`} inline>
           <InputGroup
-            onFocus={this.toggleFocus}
-            onBlur={this.toggleFocus}
+            // onFocus={this.toggleFocus}
+            // onBlur={this.toggleFocus}
             className={`${cx("input-group-no-border", { focus: !!focus })}`}
           >
             <Input
               id="search-input"
               placeholder="Search"
-              className={`${cx({ focus: !!focus})} ${s.headerSearchInput}`}
-              style={{ borderBottomLeftRadius: 4, borderTopLeftRadius: 4 }}
+              // className={`${cx({ focus: !!focus})} ${s.headerSearchInput}`}
+              style={{ borderBottomLeftRadius: 4, borderTopLeftRadius: 4 ,  text: 'black', paddingRight: '25px'  }} 
             />
-            <InputGroupAddon addonType={"prepend"}>
-              <img
+            <InputGroupAddon > 
+            {/* Usar en InputGruoupAddon si agrego icono de buscar addonType={"prepend"} */}
+              {/* <img 
                 src={search}
                 alt="search"
-                width="24px"
-                height="23px"
-                style={{ marginRight: 12 }}
-              />
+                width="30px"
+                height="38px"
+                style={{ marginRight: 22 ,  backgroundColor: 'rgb(170, 106, 222)'}}
+              />  */}
             </InputGroupAddon>
           </InputGroup>
         </Form>
@@ -219,14 +238,14 @@ class Header extends React.Component {
             >
               {this.state.notificationsOpen ? (
                 <img
-                  src={lightNotify}
+                  src={Notificacion}
                   alt="notify"
                   width="24px"
                   height={"24px"}
                 />
               ) : (
                 <>
-                  <img src={notify} alt="notify" width="24px" height={"24px"} />
+                  <img src={Notificacion} alt="notify" width="24px" height={"24px"} />
                   <i
                     className={`fa fa-circle text-danger mb-2 ${s.circleStyle}`}
                   />
@@ -253,7 +272,7 @@ class Header extends React.Component {
             >
               {this.state.messagesOpen ? (
                 <img
-                  src={lightMessages}
+                  src={Mensajes}
                   alt="notify"
                   width="24px"
                   height={"24px"}
@@ -261,7 +280,7 @@ class Header extends React.Component {
               ) : (
                 <>
                   <img
-                    src={messages}
+                    src={Mensajes}
                     alt="email"
                     width="24px"
                     height={"24px"}
@@ -279,7 +298,12 @@ class Header extends React.Component {
               <Notifications notificationsTabSelected={2} />
             </DropdownMenu>
           </Dropdown>
-          <Dropdown nav className={`${s.notificationsMenu}`} isOpen={this.state.accountOpen}
+
+
+
+
+          
+          {/* <Dropdown nav className={`${s.notificationsMenu}`} isOpen={this.state.accountOpen}
                     toggle={this.toggleAccount}>
             <DropdownToggle
               nav
@@ -291,8 +315,8 @@ class Header extends React.Component {
               <span
                 className={`${s.avatar} rounded-circle thumb-sm float-left mr-2`}
               >
-                {user.avatar || user.email === "admin@flatlogic.com" ? (
-                  <img src={user.avatar || userAvatar} alt="..." />
+                {user.avatar || user.email === "" ? (
+                  <img src={CuentaPerfil} alt="..." />
                 ) : (
                   <span>{firstUserLetter}</span>
                 )}
@@ -304,7 +328,49 @@ class Header extends React.Component {
             >
               <Notifications notificationsTabSelected={4} />
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
+
+
+
+
+<Dropdown
+        isOpen={this.state.accountOpen}
+        toggle={this.toggleAccount}
+        nav
+      >
+        <DropdownToggle
+          nav
+          className="text-white"
+          style={{ marginLeft: 20 }}
+        >
+          {this.state.accountOpen ? (
+            <img
+              src={CuentaPerfil}
+              alt="account"
+              width="28px"
+              height="28px"
+            />
+          ) : (
+            <>
+              <img
+                src={CuentaPerfil}
+                alt="account"
+                width="28px"
+                height="28px"
+              />
+              <i
+                // className={`fa fa-circle text-success mb-2 ${s.emailStyle}`}
+                // Usar en caso de activar notificaciones en el icono de cuenta
+              />
+            </>
+          )}
+        </DropdownToggle>
+        <DropdownMenu right>
+          <DropdownItem onClick={this.logout}>
+            Cerrar Sesion 
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
         </Nav>
       </Navbar>
     );

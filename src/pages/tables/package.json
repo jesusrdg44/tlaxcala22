@@ -3,5 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "main": "Tables.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "Tables": "file:"
+  }
 }

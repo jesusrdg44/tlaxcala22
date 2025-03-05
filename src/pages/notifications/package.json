@@ -2,5 +2,8 @@
   "name": "Notifications",
   "version": "0.0.0",
   "private": true,
-  "main": "Notifications.js"
+  "main": "Notifications.js",
+  "dependencies": {
+    "Notifications": "file:"
+  }
 }

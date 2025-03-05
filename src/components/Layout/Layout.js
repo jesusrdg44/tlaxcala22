@@ -17,12 +17,25 @@ import s from "./Layout.module.scss";
 import BreadcrumbHistory from "../BreadcrumbHistory";
 
 // pages
-import Typography from "../../pages/typography";
+
+import Typography from "../../pages/typography/Typography";
+import Reportes from "../../pages/reportes/Reportes";
+import Usuarios from "../../pages/usuarios/Usuarios";
+import Informes from "../../pages/informes/Informes";
+import Inventario from "../../pages/productos/Productos";
+import Configuracion from "../../pages/configu/Configuracion";
+import UpdateProductos from "../../pages/updateproductos/UpdateProductos";
+import DeleteProductos from "../../pages/deleteproductos/DeleteProductos";
+import Catalogo  from "../../pages/catalogo/Catalogo";  
+import Cuenta from "../../pages/cuenta/Cuenta";
 import Maps from "../../pages/maps";
 import Notifications from "../../pages/notifications/Notifications";
 import Icons from "../../pages/icons";
 import Tables from "../../pages/tables";
 import Charts from "../../pages/charts";
+
+
+
 
 class Layout extends React.Component {
   static propTypes = {
@@ -117,14 +130,23 @@ class Layout extends React.Component {
                       component={Dashboard}
                     />
                     <Route path={"/app/typography"} component={Typography} />
+                    <Route path={"/app/reportes"} component={Reportes} />
+                    <Route path={"/app/usuarios"} component={Usuarios} />
                     <Route path={"/app/tables"} component={Tables} />
+                    <Route path={"/app/informes"} component={Informes} />
                     <Route path={"/app/ui/maps"} component={Maps} />
+                    <Route path={"/app/configuracion"} component={Configuracion} />
+                    <Route path={"/app/cuenta"} component={Cuenta} />
+                    <Route path={"/app/ui/productos"} component={Inventario} />
                     <Route
                       path={"/app/ui/notifications"}
                       component={Notifications}
                     />
                     <Route path={"/app/ui/icons"} component={Icons} />
                     <Route path={"/app/ui/charts"} component={Charts} />
+                    <Route path={"/app/ui/updateproductos"} component={UpdateProductos}/>
+                    <Route path={"/app/ui/deleteproductos"} component={DeleteProductos} />
+                    <Route path={"/app/ui/catalogo"} component={Catalogo} />
                   </Switch>
                 </CSSTransition>
               </TransitionGroup>
