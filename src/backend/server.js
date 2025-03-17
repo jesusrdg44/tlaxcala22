@@ -4,7 +4,9 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { error } = require('console');
+const port = 5000;
 
 const app = express();
 
@@ -21,32 +23,38 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(cors({
-  origin: 'http://localhost:3000', 
-  methods: ['GET', 'POST'],
+  origin: ['*', 'http://tlaxcalasex.com'],
+  methods: ['GET', 'POST' , 'PUT', 'DELETE'],
   credentials: true 
 }));
 // Middleware para parsear informacion a JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
-// MySQL Database connection setup
-const db = mysql.createPool({
-    connectionLimit: 10,
-    host: '127.0.0.1',
+let db;
+
+// Función para conectar a la base de datos con reintentos
+function connectWithRetry() {
+  db = mysql.createConnection({
+    host: 'db', // Nombre del servicio de base de datos en Docker Compose
     user: 'root',
-    password: 'Guepardo32',  
-    database: 'turismodb',
-    port: 3307,
+    password: 'Guepardo32',  // La contraseña que has definido
+    database: 'turismo',  // Nombre de la base de datos
   });
 
-db.getConnection((err, connection) => {
+  db.connect((err) => {
     if (err) {
-      console.error('Error al conectar:', err);
+      console.error('Error al conectar a la base de datos:', err);
+      console.log('Reintentando...');
+      setTimeout(connectWithRetry, 5000); // Intentar de nuevo después de 5 segundos
     } else {
-      console.log('Conectado a MySQL');
-      connection.release();
+      console.log('Conectado a la base de datos MySQL');
     }
   });
+}
+
+// Conectar a la base de datos
+connectWithRetry();
 
   app.get('/usuarios', (req, res) => {
     const query = 'SELECT * FROM usuarios';
@@ -59,6 +67,77 @@ db.getConnection((err, connection) => {
       res.json(results);
     });
   });
+
+  app.get('/admins', (req, res) => {
+    const query = `
+    SELECT 
+    u.IdUsuario, 
+    u.username, 
+    CONCAT(u.Nombre, ' ', u.Ap, ' ', u.Am) AS NombreCompleto,
+    u.Estatus,     
+    r.Nombre_Rol
+    FROM 
+        usuarios u
+    JOIN 
+        rol r ON u.IdRol = r.IdRol
+    WHERE
+    U.IdRol=1;
+    `;
+    db.query(query, (err, results) => {
+      if (err){
+        console.log('Error al filtrar los administradores:', err);
+        return res.status(500).json({message: 'Error en el servidor'}); 
+
+      }
+      res.json(results);
+    });
+  });
+
+  app.get('/numusuarios' , (req, res ) => {
+    const query = 'SELECT COUNT(*) AS NumUsuarios FROM usuarios';
+    db.query(query, (err, results) => {
+      if (err){
+        console.log('Error al filtrar los usuarios:', err);
+        return res.status(500).json({message: 'Error en el servidor'});
+      }
+      res.json(results);
+    });
+  });
+
+  app.get('/numclientes' , (req, res ) => {
+    const query = 'SELECT COUNT(*) AS NumClientes FROM clientes';
+    db.query(query, (err, results) => {
+      if (err){
+        console.log('Error al filtrar los clientes:', err);
+        return res.status(500).json({message: 'Error en el servidor'});
+      }
+      res.json(results);
+    });
+  });
+
+  app.get('/numinformes' , (req, res ) => {
+    const query = 'SELECT COUNT(*) AS NumInformes FROM informes';
+    db.query(query, (err, results) => {
+      if (err){
+        console.log('Error al filtrar los clientes:', err);
+        return res.status(500).json({message: 'Error en el servidor'});
+      }
+      res.json(results);
+    });
+  });
+
+  app.get('/numproductos' , (req, res ) => {
+    const query = 'SELECT COUNT(*) AS NumProductos FROM productos';
+    db.query(query, (err, results) => {
+      if (err){
+        console.log('Error al filtrar los clientes:', err);
+        return res.status(500).json({message: 'Error en el servidor'});
+      }
+      res.json(results);
+    });
+  });
+
+ 
   
   
 
@@ -84,6 +163,92 @@ app.get('/productos' , (req, res) => {
     }
     console.log('Productos filtrados:', results);
     res.json(results);
+  });
+});
+
+app.get('/productosmax' , (req, res) => {
+  const query = 'SELECT * FROM productos ORDER BY Cantidad DESC LIMIT 4';
+  db.query(query , (err , results) => {
+    if (err){
+      console.error('Error filtrar productos:', err);
+      return res.status(500).json({message: 'Error de servidor'});
+    }
+    console.log('Productos filtrados:', results);
+    res.json(results);
+    });
+});
+
+app.put('/productos/:id', (req, res) => {
+  const id = req.params.id; 
+  const { Nombre, Descripcion, Categoria, Cantidad, Precio } = req.body; 
+
+  
+  const query = `UPDATE productos 
+               SET Nombre = ?, Descripcion = ?, Categoria = ?, Cantidad = ?, Precio = ? , FechaCreacion=NOW()
+               WHERE IdProducto = ?`;
+
+  db.query(query, [Nombre, Descripcion, Categoria, Cantidad, Precio, id], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar el producto:', err);
+      res.status(500).json({ error: 'Error al actualizar el producto' });
+    } else {
+      console.log(`Producto ${id} actualizado correctamente`);
+      res.json({ message: `Producto ${id} actualizado correctamente` });
+    }
+  });
+});
+
+app.put('/usuarios/:id', (req, res) => {
+  const id = req.params.id;
+  const estatus = 1;
+  const { username, password, Nombre, Ap, Am, IdRol}=req.body;
+
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.status(500).json({ message: 'Error processing the request' });
+    }
+
+  const query = `UPDATE usuarios SET username = ?, password = ?, Nombre = ?, Ap = ?, Am = ?, Estatus = ?, IdRol = ? WHERE IdUsuario = ?`;
+  db.query(query, [username, hashedPassword, Nombre, Ap, Am, estatus, IdRol, id], (err, result) => {  
+    if(err){
+      console.error('Error al actualizar el usuario:', err);
+      res.status(500).json({error: 'Error al actualizar el usuario'});
+    }else{
+      console.log(`Usuario ${id} actualizado correctamente`);
+      res.json({message: `Usuario ${id} actualizado correctamente`});
+    }
+  });
+  });
+});
+
+app.delete('/usuarios/:id', (req, res) => {
+  const id = req.params.id;
+
+  const query = `DELETE FROM usuarios WHERE IdUsuario = ?`;
+  db.query(query, [id], (err, result) => {  
+    if(err){
+      console.error('Error al eliminar el usuario:', err);
+      res.status(500).json({error: 'Error al eliminar el usuario'});
+    }else{
+      console.log(`Usuario ${id} eliminado correctamente`);
+      res.json({message: `Usuario ${id} eliminado correctamente`});
+    }
+  });
+  });
+
+app.delete('/productos/:id', (req, res) => {
+  const id = req.params.id;
+
+  const query = `DELETE FROM productos WHERE IdProducto = ?`;
+  db.query(query, [id], (err, result) => {  
+    if (err) {
+      console.error('Error al eliminar el producto:', err);
+      res.status(500).json({ error: 'Error al eliminar el producto' });
+    } else {
+      console.log(`Producto ${id} eliminado correctamente`);
+      res.json({ message: `Producto ${id} eliminado correctamente` });
+    }
   });
 });
 
@@ -140,6 +305,51 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Error processing the request' });
   }
 });
+
+app.get('/informes' , (req,res)  => {
+  const query = 'SELECT * FROM informes';
+  db.query(query, (err, results)=>{
+    if(err){
+      console.error('Error al filtrar', err);
+      return res.status(500).json({message: 'Server error'});
+    }
+    console.log('Informes filtrados:', results);
+    res.json(results);
+  });
+});
+
+app.get("/informes/:id", (req, res) => {
+  const { id } = req.params;
+  const query = "SELECT RutaArchivo FROM informes WHERE IdInforme = ?";
+  
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error("Error al obtener el informe:", err);
+      return res.status(500).json({ message: "Error del servidor" });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Informe no encontrado" });
+    }
+
+    const rutaArchivo = results[0].RutaArchivo;
+    const filePath = path.join(__dirname, rutaArchivo);
+
+    // Verifica si el archivo existe
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: "Archivo no encontrado en el servidor" });
+    }
+
+    // Enviar el archivo
+    res.download(filePath, (err) => {
+      if (err) {
+        console.error("Error al enviar el archivo:", err);
+        res.status(500).json({ message: "Error al descargar el archivo" });
+      }
+    });
+  });
+});
+
 
 app.post('/insertar_informes', upload.single('ruta') , async (req, res) => {
   const { titulo, generadopor, fecha} = req.body;
@@ -245,6 +455,6 @@ app.post('/login', (req, res) => {
 
 
 // Server listen on port 5000
-app.listen(5000, () => {
-  console.log('Server running on http://localhost:5000');
+app.listen(port, () => {
+  console.log(`Servidor escuchando en http://0.0.0.0:${port}`);
 });

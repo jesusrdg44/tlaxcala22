@@ -25,6 +25,8 @@ import IconConfig from '../../images/myicons/configuracion-de-sincronizacion.png
 import IconCuenta from '../../images/myicons/la-configuracion-de-privacidad.png';
 import IconSalir from '../../images/myicons/cerrar-sesion.png'; 
 import Usuarios from '../../images/myicons/persona.png';
+import Produccion from "../../images/myicons/produccion.png";
+import Estadisticas from "../../images/myicons/grafico.png";
 
 
 import darkTypography from "../../images/Typography-dark.svg";
@@ -167,8 +169,26 @@ class Sidebar extends React.Component {
               activeItem={this.props.activeItem}
               header="Usuarios"
               isHeader
-              link="/app/usuarios"
-              index="main"
+              link="/app/ui"
+              index="ui"
+              exact={false}
+              childrenLinks={[
+                {
+                  header: "Agregar Usuario",
+                  link: "/app/ui/agregarusuario"
+                },
+                {
+                  header: "Actualizar Usuario",
+                  link: "/app/ui/actualizarusuario"
+                },
+              
+                {
+                  header: "Mostrar Usuarios",
+                  link: "/app/usuarios"
+                }
+                
+                
+              ]}
             >
               {window.location.href.includes("usuarios") ? (
                 <img
@@ -240,13 +260,13 @@ class Sidebar extends React.Component {
               onActiveSidebarItemChange={activeItem =>
                 this.props.dispatch(changeActiveSidebarItem(activeItem))
               }
-              header="Configuración"
+              header="Produccion"
               isHeader
-              link="/app/configuracion"
+              link="/app/ui/notifications"
               index="main"
             >
               <img
-                src={IconConfig}
+                src={Produccion}
                 alt="lightDashboard"
                 width={"24px"}
                 height={"24px"}
@@ -256,12 +276,12 @@ class Sidebar extends React.Component {
               onActiveSidebarItemChange={activeItem =>
                 this.props.dispatch(changeActiveSidebarItem(activeItem))
               }
-              header="Cuenta"
-              link="/app/cuenta"
+              header="Estadisticas"
+              link="/app/ui/charts"
               isHeader
             >
               <img
-                src={IconCuenta}
+                src={Estadisticas}
                 alt="lightDashboard"
                 width={"24px"}
                 height={"24px"}

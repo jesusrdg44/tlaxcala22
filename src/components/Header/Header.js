@@ -19,6 +19,7 @@ import {
 import cx from "classnames";
 import Notifications from "../Notifications";
 import { logoutUser } from "../../actions/user";
+
 import {
   toggleSidebar,
   openSidebar,
@@ -110,6 +111,7 @@ class Header extends React.Component {
 
   logout = () => {
     this.props.dispatch(logoutUser());
+   
   }
 
   changeArrowImg = () => {
@@ -123,6 +125,8 @@ class Header extends React.Component {
   toggleFocus = () => {
     this.setState(prevState => ({ focus: !prevState.focus }));
   };
+
+
 
   // collapse/uncolappse
   switchSidebar() {
@@ -196,29 +200,14 @@ class Header extends React.Component {
           onMouseLeave={this.changeArrowImgOut}
            // Color morado
         >
-          <a href="dashboard" >Buscar</a></button>
+          </button>
         <Form className={`d-md-down-none`} inline>
           <InputGroup
             // onFocus={this.toggleFocus}
             // onBlur={this.toggleFocus}
             className={`${cx("input-group-no-border", { focus: !!focus })}`}
           >
-            <Input
-              id="search-input"
-              placeholder="Search"
-              // className={`${cx({ focus: !!focus})} ${s.headerSearchInput}`}
-              style={{ borderBottomLeftRadius: 4, borderTopLeftRadius: 4 ,  text: 'black', paddingRight: '25px'  }} 
-            />
-            <InputGroupAddon > 
-            {/* Usar en InputGruoupAddon si agrego icono de buscar addonType={"prepend"} */}
-              {/* <img 
-                src={search}
-                alt="search"
-                width="30px"
-                height="38px"
-                style={{ marginRight: 22 ,  backgroundColor: 'rgb(170, 106, 222)'}}
-              />  */}
-            </InputGroupAddon>
+           
           </InputGroup>
         </Form>
         <Nav>
@@ -229,29 +218,7 @@ class Header extends React.Component {
             id="basic-nav-dropdown"
             className={`${s.notificationsMenu}`}
           >
-            <DropdownToggle
-              nav
-              className={
-                "text-white"
-              }
-              style={{ marginLeft: 20 }}
-            >
-              {this.state.notificationsOpen ? (
-                <img
-                  src={Notificacion}
-                  alt="notify"
-                  width="24px"
-                  height={"24px"}
-                />
-              ) : (
-                <>
-                  <img src={Notificacion} alt="notify" width="24px" height={"24px"} />
-                  <i
-                    className={`fa fa-circle text-danger mb-2 ${s.circleStyle}`}
-                  />
-                </>
-              )}
-            </DropdownToggle>
+          
             <DropdownMenu
               right
               className={`${s.notificationsWrapper} py-0 animated animated-fast fadeInUp`}
@@ -259,79 +226,13 @@ class Header extends React.Component {
               <Notifications />
             </DropdownMenu>
           </Dropdown>
-          <Dropdown
-            isOpen={this.state.messagesOpen}
-            toggle={this.toggleMessages}
-            nav
-            className={`${s.notificationsMenu}`}
-          >
-            <DropdownToggle
-              nav
-              className={"text-white"}
-              style={{ marginLeft: 20 }}
-            >
-              {this.state.messagesOpen ? (
-                <img
-                  src={Mensajes}
-                  alt="notify"
-                  width="24px"
-                  height={"24px"}
-                />
-              ) : (
-                <>
-                  <img
-                    src={Mensajes}
-                    alt="email"
-                    width="24px"
-                    height={"24px"}
-                  />
-                  <i
-                    className={`fa fa-circle text-success mb-2 ${s.emailStyle}`}
-                  />
-                </>
-              )}
-            </DropdownToggle>
+        
             <DropdownMenu
               right
               className={`${s.notificationsWrapper} py-0 animated animated-fast fadeInUp`}
             >
               <Notifications notificationsTabSelected={2} />
             </DropdownMenu>
-          </Dropdown>
-
-
-
-
-          
-          {/* <Dropdown nav className={`${s.notificationsMenu}`} isOpen={this.state.accountOpen}
-                    toggle={this.toggleAccount}>
-            <DropdownToggle
-              nav
-              className={
-                "text-white"
-              }
-              style={{ marginLeft: 20 }}
-            >
-              <span
-                className={`${s.avatar} rounded-circle thumb-sm float-left mr-2`}
-              >
-                {user.avatar || user.email === "" ? (
-                  <img src={CuentaPerfil} alt="..." />
-                ) : (
-                  <span>{firstUserLetter}</span>
-                )}
-              </span>
-            </DropdownToggle>
-            <DropdownMenu
-                right
-                className={`${s.notificationsWrapper} py-0 animated animated-fast fadeInUp`}
-            >
-              <Notifications notificationsTabSelected={4} />
-            </DropdownMenu>
-          </Dropdown> */}
-
-
-
 
 <Dropdown
         isOpen={this.state.accountOpen}

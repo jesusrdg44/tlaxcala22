@@ -5,7 +5,8 @@
   "scripts": {
     "build": "cross-env PUBLIC_URL='./' NODE_OPTIONS=--openssl-legacy-provider node scripts/build.js",
     "start": "node --openssl-legacy-provider scripts/start.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "preinstall": "npm config set legacy-peer-deps true"
   },
   "browserslist": [
     ">0.2%",
@@ -41,7 +42,7 @@
       "<rootDir>/src/**/__tests__/**/*.{js,jsx}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx}"
     ],
-    "testURL": "http://localhost",
+    "testURL": "http://tlaxcalasex.com",
     "transform": {
       "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
@@ -59,6 +60,7 @@
     "animate.css": "4.1.1",
     "apexcharts": "^3.45.1",
     "awesome-bootstrap-checkbox": "1.0.1",
+    "axios": "^1.8.3",
     "bcrypt": "^5.1.1",
     "bootstrap": "^4.6.0",
     "classnames": "^2.3.2",
@@ -66,11 +68,12 @@
     "echarts": "^4.9.0",
     "echarts-for-react": "^2.0.16",
     "font-awesome": "4.7.0",
+    "fs": "^0.0.1-security",
     "glyphicons-halflings": "^1.9.1",
     "line-awesome": "github:icons8/line-awesome",
     "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1",
-    "mysql2": "^3.12.0",
+    "mysql2": "^3.13.0",
     "rc-hammerjs": "^0.6.10",
     "react": "^16.14.0",
     "react-animate-height": "^2.1.2",

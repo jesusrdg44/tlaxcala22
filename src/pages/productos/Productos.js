@@ -19,7 +19,7 @@ const Productos = () => {
   const insertar_productos = () => {
     console.log("Enviando producto:", product);
   
-    fetch('http://localhost:5000/insertar_productos', {
+    fetch('http://67.217.243.37:5000/insertar_productos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ const Productos = () => {
     .then(data => {
       if (data.success) {
         console.log("Producto insertado:", data);
-        
+        alert ('Producto Registrado Exitosamente');
         setProduct({
           name: "",
           description: "",

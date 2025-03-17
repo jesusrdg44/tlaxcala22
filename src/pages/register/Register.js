@@ -86,7 +86,7 @@ class Register extends React.Component {
   }
 
   fetchRoles() {
-    fetch('http://localhost:5000/roles')
+    fetch('http://67.217.243.37:5000/roles')
       .then(response => response.json())
       .then(data => {
         this.setState({ roles: data });
@@ -128,17 +128,7 @@ class Register extends React.Component {
       return;
     }
 
-    // console.log("Enviando datos:", JSON.stringify({ 
-    //   username: email, 
-    //   password, 
-    //   nombre, 
-    //   ap, 
-    //   am, 
-    //   estatus, 
-    //   IdRol: rol 
-    // }));
-  
-    fetch('http://localhost:5000/register', {
+    fetch('http://67.217.243.37:5000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

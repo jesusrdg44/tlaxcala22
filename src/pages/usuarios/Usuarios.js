@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Col, Row, Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Col, Row, Form, FormGroup, Label, Input, Button, Table } from "reactstrap";
 import Widget from "../../components/Widget/Widget";
 import s from "./Usuarios.scss"; // Assuming you are importing the styles
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Usuarios = () => {
   const [report, setReport] = useState({ title: "", description: "", date: "" });
@@ -16,10 +17,9 @@ const Usuarios = () => {
     doUsuarios();
   };
 
-  // Fetching the usuarios list
   const doUsuarios = () => {
     console.log("Fetching usuarios...");
-    fetch('http://localhost:5000/usuarios')
+    fetch('http://67.217.243.37:5000/usuarios')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch usuarios');
@@ -41,7 +41,7 @@ const Usuarios = () => {
 
   return (
     <div className="table-container">
-      <table>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>ID</th>
@@ -49,8 +49,7 @@ const Usuarios = () => {
             <th>Apellido Paterno</th>
             <th>Apellido Materno</th>
             <th>Correo Electronico</th>
-            <th>Estatus</th>
-            <th>Rol</th>
+          
           </tr>
         </thead>
         <tbody>
@@ -62,8 +61,7 @@ const Usuarios = () => {
                 <td>{usuario.Ap}</td>
                 <td>{usuario.Am}</td>
                 <td>{usuario.username}</td>
-                <td>{usuario.Estatus}</td>
-                <td>{usuario.IdRol}</td>
+                
               </tr>
             ))
           ) : (
@@ -72,7 +70,7 @@ const Usuarios = () => {
             </tr>
           )}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };

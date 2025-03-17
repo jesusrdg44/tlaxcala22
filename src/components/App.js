@@ -31,7 +31,7 @@ class App extends React.PureComponent {
   
   render() {
     return (
-        <div>
+        <div>  
             <ToastContainer
                 autoClose={5000}
                 hideProgressBar

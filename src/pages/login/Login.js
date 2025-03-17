@@ -52,7 +52,7 @@ class Login extends React.Component {
     e.preventDefault();
     const { email, password } = this.state;
 
-    fetch('http://localhost:5000/login', {
+    fetch('http://67.217.243.37:5000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

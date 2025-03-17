@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000'; // Dirección del backend
+const API_URL = 'http://67.217.243.37:5000'; // Dirección del backend
 
 export const getProducts = async () => {
   try {

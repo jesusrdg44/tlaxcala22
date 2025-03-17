@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import uuid from 'uuid/v4'
 import Widget from '../../components/Widget';
+import {imagenes} from '../../images/configcarpeta.png';
+
 import {useNavigate} from "react-router-dom";
 
 const Configuracion = () => {
@@ -14,6 +16,11 @@ const Configuracion = () => {
     itemsPerPage: 10,
   });
 
+  
+   
+  
+
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setConfig({ ...config, [name]: value });
@@ -29,10 +36,12 @@ const Configuracion = () => {
     <div>
       <Row>
         <Col lg={12}>
-          <Widget title={"Configuración del Sitio"}>
+          <Widget title={"Configuración"}>
             <Form onSubmit={handleSubmit}>
               <FormGroup>
+              
                 <Label for="siteName">Nombre del Sitio</Label>
+               
                 <Input
                   type="text"
                   name="siteName"
@@ -64,19 +73,9 @@ const Configuracion = () => {
                   onChange={handleChange}
                 />
               </FormGroup>
-              <FormGroup>
-                <Label for="itemsPerPage">Elementos por Página</Label>
-                <Input
-                  type="number"
-                  name="itemsPerPage"
-                  id="itemsPerPage"
-                  placeholder="Ingrese el número de elementos por página"
-                  value={config.itemsPerPage}
-                  onChange={handleChange}
-                />
-              </FormGroup>
+            
               <Button color="primary" type="submit">
-                Guardar Configuración
+                Guardar Cambios
               </Button>
             </Form>
           </Widget>

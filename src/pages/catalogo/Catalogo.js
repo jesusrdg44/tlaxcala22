@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import {
-  Row, Col, Button,
+  Row, Col, Button, Table
 } from 'reactstrap';
 
 import { toast } from 'react-toastify';
@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import uuid from 'uuid/v4'
 import Widget from '../../components/Widget/Widget';
 import {useNavigate} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 
@@ -25,7 +27,7 @@ const Catalogo = () =>{
   }
 
   const showProductos = () =>{
-    fetch ('http://localhost:5000/productos')
+    fetch ('http://67.217.243.37:5000/productos')
     .then((response) => {
       if(!response.ok){
         throw new Error ('Fallo al filtrar productos');
@@ -53,7 +55,8 @@ const Catalogo = () =>{
     
     return (
       <div className="table-container">
-      <table>
+    <Table striped bordered hover>
+        
         <thead>
           <tr>
             <th>ID</th>
@@ -75,7 +78,9 @@ const Catalogo = () =>{
                 <td>{catalogo.Categoria}</td>
                 <td>{catalogo.Cantidad}</td>
                 <td>{catalogo.Precio}</td>
-                <td>{catalogo.FechaCreacion}</td>
+                <td>{new Date(catalogo.FechaCreacion).toLocaleDateString()}</td>
+
+
               </tr>
             ))
           ) : (
@@ -84,7 +89,7 @@ const Catalogo = () =>{
             </tr>
           )}
         </tbody>
-      </table>
+      </Table>
     </div>
     );
 }

@@ -27,6 +27,9 @@ import Configuracion from "../../pages/configu/Configuracion";
 import UpdateProductos from "../../pages/updateproductos/UpdateProductos";
 import DeleteProductos from "../../pages/deleteproductos/DeleteProductos";
 import Catalogo  from "../../pages/catalogo/Catalogo";  
+import AgregarUsuario from "../../pages/agregarusuario/AgregarUsuario";
+import ActualizarUsuario from "../../pages/actualizarusuario/ActualizarUsuario";
+import EliminarUsuario from "../../pages/eliminarusuario/EliminarUsuario";  
 import Cuenta from "../../pages/cuenta/Cuenta";
 import Maps from "../../pages/maps";
 import Notifications from "../../pages/notifications/Notifications";
@@ -146,6 +149,9 @@ class Layout extends React.Component {
                     <Route path={"/app/ui/charts"} component={Charts} />
                     <Route path={"/app/ui/updateproductos"} component={UpdateProductos}/>
                     <Route path={"/app/ui/deleteproductos"} component={DeleteProductos} />
+                    <Route path={"/app/ui/agregarusuario"} component={AgregarUsuario} />
+                    <Route path={"/app/ui/actualizarusuario"} component={ActualizarUsuario} />
+                    <Route path={"/app/ui/eliminarusuario"} component={EliminarUsuario} />
                     <Route path={"/app/ui/catalogo"} component={Catalogo} />
                   </Switch>
                 </CSSTransition>

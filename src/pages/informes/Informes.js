@@ -23,7 +23,7 @@ const Informes = () => {
 
   const showRol = () => {
     console.log('Fetching roles...');
-    fetch('http://localhost:5000/roles')
+    fetch('http://67.217.243.37:5000/roles')
       .then((response) => {
         if (!response.ok) throw new Error('Error fetching roles');
         return response.json();
@@ -46,7 +46,7 @@ const Informes = () => {
     formData.append("fecha", report.fecha);
     formData.append("ruta", report.ruta);
 
-    fetch('http://localhost:5000/insertar_informes', {
+    fetch('http://67.217.243.37:5000/insertar_informes', {
       method: 'POST',
       body: formData,
     })
@@ -57,6 +57,14 @@ const Informes = () => {
       .then((data) => {
         console.log("Inserted report:", data);
         setInformes([...informes, data]);
+        alert('Informe Creado Exitosamente');
+
+        setReport({
+          titulo: '',
+          ruta: '', 
+          fecha: new Date().toISOString().split('T')[0],
+          generadopor: ''
+        });
       })
       .catch((error) => {
         console.error('Error inserting report:', error);
@@ -99,6 +107,7 @@ const Informes = () => {
                   className="form-control"
                   name="generadopor"
                   onChange={(e) => setReport({ ...report, generadopor: parseInt(e.target.value, 10) })}
+                  value={report.generadopor}
                   required
                 >
                   <option value="">Selecciona un rol</option>

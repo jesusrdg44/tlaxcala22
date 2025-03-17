@@ -27,7 +27,7 @@ const Reportes = () => {
 
   const showRol = () => {
     console.log('Fetching roles...');
-    fetch('http://localhost:5000/roles')
+    fetch('http://67.217.243.37:5000/roles')
       .then(response => {
         if (!response.ok) throw new Error('Error fetching roles');
         return response.json();
@@ -40,7 +40,7 @@ const Reportes = () => {
   };
 
   const showClientes = () => {
-    fetch('http://localhost:5000/clientes')
+    fetch('http://67.217.243.37:5000/clientes')
     .then(response =>{
       if(!response.ok) throw new Error ('Error al filtrar');
       return response.json();
@@ -55,7 +55,7 @@ const Reportes = () => {
   const insertar_reportes = () => {
     console.log("Enviando Reporte:", report);
 
-    fetch('http://localhost:5000/insertar_reportes', {
+    fetch('http://67.217.243.37:5000/insertar_reportes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -69,6 +69,20 @@ const Reportes = () => {
     .then(data => {
       console.log("Reporte insertado:", data);
       setReportes([...reportes, data]);
+      alert ('Reporte Creado Exitosamente');
+
+      setReport({
+        tituloreporte: "", 
+        folio: "",
+        cliente: "",
+        clave : "",
+        tiporeporte: "",
+        description: "", 
+        date: new Date().toISOString().split('T')[0],  
+        generadopor: "",
+        estatus: "",
+        situacion: ""
+      });
     })
     .catch(error => console.error('Error al insertar:', error));
   };

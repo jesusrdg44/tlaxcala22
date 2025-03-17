@@ -1,118 +1,106 @@
-import React from 'react';
-
-import {
-  Row, Col
-} from 'reactstrap';
-
+import React, { Component } from 'react';
+import { Row, Col } from 'reactstrap';
 import Widget from '../../components/Widget';
 import ApexChart from 'react-apexcharts';
 
-import s from './Charts.module.scss';
-import {chartData} from './mock';
-
-import ReactEchartsCore from 'echarts-for-react/lib/core';
- 
-import echarts from 'echarts/lib/echarts';
-
-import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/pie';
-import 'echarts/lib/chart/themeRiver';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-
-class Charts extends React.Component {
-
+class Charts extends Component {
   state = {
-    cd: chartData,
-    initEchartsOptions: {
-      renderer: 'canvas'
-    },
+    usuarios: [],
+    clientes: [],
+    productos: [],
+  };
 
+  componentDidMount() {
+    this.fetchUsuarios();
+    this.fetchClientes();
+    this.fetchProductos();
   }
 
+  fetchUsuarios = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/usuarios');
+      const data = await response.json();
+      this.setState({ usuarios: data });
+    } catch (error) {
+      console.error('Error fetching usuarios:', error);
+    }
+  };
+
+  fetchClientes = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/clientes');
+      const data = await response.json();
+      this.setState({ clientes: data });
+    } catch (error) {
+      console.error('Error fetching clientes:', error);
+    }
+  };
+
+  fetchProductos = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/productos');
+      const data = await response.json();
+      this.setState({ productos: data });
+    } catch (error) {
+      console.error('Error fetching productos:', error);
+    }
+  };
+
   render() {
-    const { cd, initEchartsOptions } = this.state
+    const { usuarios, clientes, productos } = this.state;
+
+    const usuariosChart = {
+      series: [{
+        name: 'Usuarios',
+        data: usuarios.map((u) => u.IdUsuario),
+      }],
+      options: {
+        chart: { type: 'bar' },
+        xaxis: { categories: usuarios.map((u) => u.Nombre) },
+      },
+    };
+
+    const clientesChart = {
+      series: clientes.map((c) => c.IdCliente),
+      options: {
+        labels: clientes.map((c) => c.Nombre),
+        chart: { type: 'pie' },
+      },
+    };
+
+    const productosChart = {
+      series: [{
+        name: 'Productos',
+        data: productos.map((p) => p.Precio),
+      }],
+      options: {
+        chart: { type: 'bar' },
+        xaxis: { categories: productos.map((p) => p.Nombre) },
+      },
+    };
+
     return (
-      <div className={s.root}>
-        <div>
-          <Row>
-            <Col lg={7} xs={12}>
-              <Widget
-                title={<p style={{ fontWeight: 700 }}>Apex</p>}
-                customDropDown
-              >
-                <ApexChart 
-                  className="sparkline-chart"
-                  height={350} 
-                  series={cd.apex.column.series}
-                  options={cd.apex.column.options}
-                  type={"bar"}
-                />
-              </Widget>
-            </Col>
-            <Col lg={5} xs={12}>
-              <Widget
-                title={<p style={{ fontWeight: 700 }}>Echarts Line Chart</p>}
-                customDropDown
-              >
-                <ReactEchartsCore
-                  echarts={echarts}
-                  option={cd.echarts.line}
-                  opts={initEchartsOptions}
-                  style={{height: "365px"}}
-                />
-              </Widget>
-            </Col>
-            <Col lg={12} xs={12}>
-              <Row>
-                <Col lg={6} xs={12}>
-                  <Widget
-                    title={<p style={{ fontWeight: 700 }}>Apex <span className="fw-semi-bold">Monochrome Pie</span></p>}
-                    customDropDown
-                  >
-                    <ApexChart 
-                      className="sparkline-chart"
-                      type={"pie"} 
-                      height={200} 
-                      series={cd.apex.pie.series}
-                      options={cd.apex.pie.options}
-                    />
-                  </Widget>
-                </Col>
-                <Col lg={6} xs={12}>
-                  <Widget
-                    title={<p style={{ fontWeight: 700 }}>Chart <span className="fw-semi-bold">Donut Chart</span></p>}
-                    customDropDown
-                  >
-                    <ReactEchartsCore
-                      echarts={echarts}
-                      option={cd.echarts.donut}
-                      opts={initEchartsOptions}
-                      style={{height: "170px"}}
-                    />
-                  </Widget>
-                </Col>
-              </Row>
-            </Col>
-            <Col lg={12} xs={12}>
-              <Widget
-                title={<p style={{ fontWeight: 700 }}>Echarts <span className="fw-semi-bold">River Chart</span></p>}
-                customDropDown
-              >
-                <ReactEchartsCore
-                  echarts={echarts}
-                  option={cd.echarts.river}
-                  opts={initEchartsOptions}
-                  style={{height: "350px"}}
-                />
-              </Widget>
-            </Col>
-          </Row>
-        </div>
+      <div>
+        <Row>
+          <Col lg={6} xs={12}>
+            <Widget title={<p style={{ fontWeight: 700 }}>Usuarios</p>}>
+              <ApexChart options={usuariosChart.options} series={usuariosChart.series} type='bar' height={300} />
+            </Widget>
+          </Col>
+          <Col lg={6} xs={12}>
+            <Widget title={<p style={{ fontWeight: 700 }}>Clientes</p>}>
+              <ApexChart options={clientesChart.options} series={clientesChart.series} type='pie' height={300} />
+            </Widget>
+          </Col>
+          <Col lg={12} xs={12}>
+            <Widget title={<p style={{ fontWeight: 700 }}>Productos</p>}>
+              <ApexChart options={productosChart.options} series={productosChart.series} type='bar' height={300} />
+            </Widget>
+          </Col>
+        </Row>
       </div>
     );
   }
-
 }
 
 export default Charts;
