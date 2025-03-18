@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(cors({
-  origin: ['*', 'http://67.217.243.37', 'http://67.217.243.37:3000'],
+  origin: "*",
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -456,6 +456,6 @@ app.post('/login', (req, res) => {
 
 
 // Server listen on port 5000
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Servidor escuchando en http://0.0.0.0:${port}`);
 });

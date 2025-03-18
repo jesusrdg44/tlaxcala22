@@ -1,21 +1,10 @@
-// Si estás en desarrollo, se usará localhost con el puerto 8080 (o el que uses)
-// En producción, se usará la IP de tu servidor y el puerto 5000.
-const hostApi = process.env.NODE_ENV === "development" 
-  ? "http://localhost" 
-  : "http://67.217.243.37";
-  
-const portApi = process.env.NODE_ENV === "development" 
-  ? 8080 
-  : 5000;
-
-const baseURLApi = `${hostApi}${portApi ? `:${portApi}` : ``}`;
+// config.js
+const baseURLApi = "http://67.217.243.37:5000";
 
 export default {
-  hostApi,
-  portApi,
   baseURLApi,
-  // Si no usas otras variables, puedes actualizar también 'remote' para que apunte a tu backend
   remote: baseURLApi,
+  // Otras configuraciones...
   isBackend: process.env.REACT_APP_BACKEND,
   auth: {
     email: 'admin@flatlogic.com',
