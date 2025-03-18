@@ -34,5 +34,6 @@ ENV NODE_OPTIONS="--dns-result-order=ipv4first"
 
 # Definir el script de ejecución con pm2
 
-CMD ["npx", "serve", "-s", "/app/build", "-l", "3000"]
+CMD ["sh", "-c", "node /app/src/backend/server.js & npx serve -s /app/build -l 3000"]
+
 
