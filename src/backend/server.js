@@ -23,10 +23,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(cors({
-  origin: ['*', 'http://tlaxcalasex.com'],
-  methods: ['GET', 'POST' , 'PUT', 'DELETE'],
-  credentials: true 
+  origin: ['*', 'http://67.217.243.37', 'http://67.217.243.37:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
+
 // Middleware para parsear informacion a JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
