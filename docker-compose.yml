@@ -1,36 +1,32 @@
-services:
-  frontend:
-    build:
-      context: .  # Asegúrate de que tu Dockerfile esté en la raíz del proyecto
-      dockerfile: Dockerfile
-    ports:
-      - "80:3000"
-    networks:
-      - app-network
+version: "3.8"
 
-  backend:
+services:
+  app:
     build:
-      context: ./src/backend  # Asegúrate de que tu Dockerfile esté en src/backend
+      context: .
       dockerfile: Dockerfile
+    container_name: turismo-app
     ports:
+      - "3000:3000"
       - "5000:5000"
-    environment:
-      - NODE_ENV=production
     depends_on:
       - db
     networks:
       - app-network
+    environment:
+      - NODE_OPTIONS=--dns-result-order=ipv4first
 
   db:
     image: mysql:8
     container_name: mysql-db
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Guepardo32  # Cambia esto por una contraseña segura
-      MYSQL_DATABASE: turismo  # Nombre de la base de datos a crear
+      MYSQL_ROOT_PASSWORD: Guepardo32
+      MYSQL_DATABASE: turismo
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql  # Persistencia de datos
+      - mysql_data:/var/lib/mysql
     networks:
       - app-network
 

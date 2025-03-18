@@ -1,34 +1,38 @@
-# Use official Node.js image as base
+# Usa Node.js como base
 FROM node:20.17-alpine
 
-# Set the working directory inside the container
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Instala git
+# Instala dependencias generales
 RUN apk add --no-cache git
 
-# Copy package.json and package-lock.json (if available)
+# Copia los archivos de dependencias
 COPY package*.json ./
 
-# Install dependencies
+# Instala dependencias
 RUN npm install --legacy-peer-deps
 
-
-# Copy the rest of the project files
+# Copia todo el código del proyecto
 COPY . .
 
-# Establece la variable de entorno para OpenSSL en el contenedor
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
-# Construye la aplicación React para producción
+# 🔹 Construcción del Frontend
 RUN npm run build
 
+# 🔹 Configuración del Backend
+WORKDIR /app/src/backend
+RUN npm install --legacy-peer-deps
 
-# Serve the app using a simple server like serve
-RUN npm install -g serve
+# Exponer puertos
+EXPOSE 3000 5000
 
-# Expose the port that the app will run on
-EXPOSE 3000
+# Instalar PM2 y `serve` globalmente
+RUN npm install -g pm2 serve
 
-# Start the server
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Establecer la resolución DNS manualmente (opcional)
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
+
+# Definir el script de ejecución con pm2
+
+CMD ["npx", "serve", "-s", "/app/build", "-l", "3000"]
+
