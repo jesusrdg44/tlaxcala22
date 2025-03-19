@@ -18,7 +18,7 @@ class Charts extends Component {
 
   fetchUsuarios = async () => {
     try {
-      const response = await fetch('http://localhost:5000/usuarios');
+      const response = await fetch('http://67.217.243.37:5000/usuarios');
       const data = await response.json();
       this.setState({ usuarios: data });
     } catch (error) {
@@ -28,7 +28,7 @@ class Charts extends Component {
 
   fetchClientes = async () => {
     try {
-      const response = await fetch('http://localhost:5000/clientes');
+      const response = await fetch('http://67.217.243.37:5000/clientes');
       const data = await response.json();
       this.setState({ clientes: data });
     } catch (error) {
@@ -38,7 +38,7 @@ class Charts extends Component {
 
   fetchProductos = async () => {
     try {
-      const response = await fetch('http://localhost:5000/productos');
+      const response = await fetch('http://67.217.243.37:5000/productos');
       const data = await response.json();
       this.setState({ productos: data });
     } catch (error) {
